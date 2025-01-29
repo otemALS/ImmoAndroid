@@ -5,6 +5,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
+import bts.sio.azurimmo1.viewsmodel.BatimentViewModel
 
 // Fonction Composable pour afficher la liste des bâtiments
 @Composable

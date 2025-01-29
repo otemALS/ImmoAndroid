@@ -1,4 +1,4 @@
-package bts.sio.azurimmo.model
+package bts.sio.azurimmo1.model
 
 data class Batiment(
     val id: Int,

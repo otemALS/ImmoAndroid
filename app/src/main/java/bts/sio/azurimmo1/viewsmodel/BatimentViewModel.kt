@@ -1,6 +1,8 @@
+package bts.sio.azurimmo1.viewsmodel
+
 import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
-import bts.sio.azurimmo.model.Batiment
+import bts.sio.azurimmo1.model.Batiment
 import androidx.compose.runtime.*
 import androidx.lifecycle.viewModelScope
 import kotlinx.coroutines.launch

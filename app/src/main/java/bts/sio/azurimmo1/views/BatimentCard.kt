@@ -9,7 +9,7 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
-import bts.sio.azurimmo.model.Batiment
+import bts.sio.azurimmo1.model.Batiment
 
 @Composable
 fun BatimentCard(batiment: Batiment) { // Notez l'annotation @Composable

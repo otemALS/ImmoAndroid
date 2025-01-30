@@ -13,11 +13,11 @@ fun AppartementList() {
 // Récupérer le ViewModel dans le composable avec viewModel()
     val viewModel: AppartementViewModel = viewModel()
 // Observer les données des appartements via le ViewModel
-    val appartement = viewModel.appartements.value
+    val appartements = viewModel.appartements.value
     LazyColumn(
         modifier = Modifier.padding(8.dp)
     ) {
-        items(appartement) { appartement ->
+        items(appartements) { appartement ->
             AppartementCard(appartement = appartement) // Appel de la fonction BatimentCard
         }
     }

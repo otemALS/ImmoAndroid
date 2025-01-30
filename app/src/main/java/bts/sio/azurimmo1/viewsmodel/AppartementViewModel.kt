@@ -16,13 +16,11 @@ class AppartementViewModel : ViewModel() {
         getAppartements()
     }
 
-    private fun getAppartements() {
-        TODO("Not yet implemented")
-    }
+
 
 
     // Fonction pour simuler le chargement de bâtiments
-    private fun loadAppartements() {
+    private fun getAppartements() {
         viewModelScope.launch {
             _appartements.value = listOf(
                 Appartement(

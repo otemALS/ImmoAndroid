@@ -1,5 +1,5 @@
-import bts.sio.azurimmo.model.Batiment
 import bts.sio.azurimmo1.model.Batiment
+
 import retrofit2.http.GET
 
 

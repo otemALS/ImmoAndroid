@@ -20,7 +20,7 @@ class MainActivity : ComponentActivity() {
         super.onCreate(savedInstanceState)
         setContent {
             // Appel de la fonction principale pour structurer l'affichage
-            AppartementList()
+            BatimentList()
         }
     }
 

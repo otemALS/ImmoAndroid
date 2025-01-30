@@ -1,28 +1,32 @@
-import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.foundation.lazy.items
-import androidx.compose.runtime.Composable
-import androidx.compose.ui.Modifier
-import androidx.compose.ui.unit.dp
-import androidx.lifecycle.viewmodel.compose.viewModel
-import bts.sio.azurimmo1.viewsmodel.AppartementViewModel
+import bts.sio.azurimmo1.model.Appartement
 
-// Fonction Composable pour afficher la liste des appartements
 @Composable
-fun AppartementList() {
-// Récupérer le ViewModel dans le composable avec viewModel()
-    val viewModel: AppartementViewModel = viewModel()
-// Observer les données des appartements via le ViewModel
+fun AppartementList( viewModel: AppartementViewModel = viewModel()) {
     val appartements = viewModel.appartements.value
-    LazyColumn(
-        modifier = Modifier.padding(8.dp)
-    ) {
-        items(appartements) { appartement ->
-            AppartementCard(appartement = appartement) // Appel de la fonction BatimentCard
+    val isLoading = viewModel.isLoading.value
+    val errorMessage = viewModel.errorMessage.value
+    Box(modifier = Modifier.fillMaxSize()) {
+        when {
+            isLoading -> {
+                CircularProgressIndicator(
+                    modifier = Modifier.align(Alignment.Center)
+                )
+            }
+            errorMessage != null -> {
+                Text(
+                    text = errorMessage ?: "Erreur inconnue",
+                    modifier = Modifier
+                        .align(Alignment.Center)
+                        .padding(16.dp),
+                    color = MaterialTheme.colorScheme.error
+                )
+            }
+            else -> {
+                LazyColumn {
+                    items(batiments) { batiment ->
+                        BatimentCard(batiment = batiment) // Appel de la fonction BatimentCard
+                    }
+                }
+            }
         }
     }
-}
-
-
-
-

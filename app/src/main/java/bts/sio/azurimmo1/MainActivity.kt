@@ -1,5 +1,7 @@
 package bts.sio.azurimmo1
 
+import AppartementList
+import BatimentList
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
@@ -16,32 +18,24 @@ import bts.sio.azurimmo1.ui.theme.Azurimmo1Theme
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        enableEdgeToEdge()
         setContent {
-            Azurimmo1Theme {
-                Scaffold(modifier = Modifier.fillMaxSize()) { innerPadding ->
-                    Greeting(
-                        name = "Android",
-                        modifier = Modifier.padding(innerPadding)
-                    )
-                }
-            }
+            // Appel de la fonction principale pour structurer l'affichage
+            AppartementList()
         }
     }
-}
 
-@Composable
-fun Greeting(name: String, modifier: Modifier = Modifier) {
-    Text(
-        text = "Hello $name!",
-        modifier = modifier
-    )
-}
+    // Fonction pour prévisualiser BatimentList uniquement
+    @Preview(showBackground = true)
+    @Composable
+    fun PreviewBatimentList() {
+        BatimentList()
+    }
 
-@Preview(showBackground = true)
-@Composable
-fun GreetingPreview() {
-    Azurimmo1Theme {
-        Greeting("Android")
+    // Fonction pour prévisualiser AppartementList uniquement
+    @Preview(showBackground = true)
+    @Composable
+    fun PreviewAppartementList() {
+        AppartementList()
     }
 }
+

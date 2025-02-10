@@ -1,14 +1,10 @@
-import bts.sio.azurimmo1.model.Appartement
-import bts.sio.azurimmo1.model.Batiment
+package bts.sio.azurimmo1.api
 
+import bts.sio.azurimmo1.model.Intervention
 import retrofit2.http.GET
-
+import retrofit2.http.Path
 
 interface ApiService {
-    @GET("api/batiments/")
-    suspend fun getBatiments(): List<Batiment>
-
-
-        @GET("api/appartements/")
-        suspend fun getAppartements(): List<Appartement>
-    }
+    @GET("api/interventions/appartement/{appartementId}")
+    suspend fun getInterventionsByAppartementId(@Path("appartementId") appartementId: Long): List<Intervention>
+}

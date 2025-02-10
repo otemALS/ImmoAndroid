@@ -21,7 +21,7 @@ class InterventionViewModel : ViewModel() {
         viewModelScope.launch {
             _isLoading.value = true
             try {
-                val response = RetrofitInstance.apiService.getInterventionsByAppartementId(appartementId)
+                val response = RetrofitInstance.api.getInterventions()
                 _interventions.value = response
             } catch (e: Exception) {
                 _errorMessage.value = "Erreur : ${e.message}"

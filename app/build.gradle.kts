@@ -5,6 +5,12 @@ plugins {
 }
 
 android {
+
+    packagingOptions {
+        resources {
+            excludes += "META-INF/INDEX.LIST"
+        }
+    }
     namespace = "bts.sio.azurimmo1"
     compileSdk = 35
 
@@ -62,4 +68,6 @@ dependencies {
     implementation(libs.retrofit)
     implementation(libs.retrofit.gson)
     implementation(libs.navigation.compose)
+
+
 }

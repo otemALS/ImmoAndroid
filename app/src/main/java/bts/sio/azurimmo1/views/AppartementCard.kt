@@ -28,6 +28,7 @@ fun AppartementCard(appartement: Appartement) { // Notez l'annotation @Composabl
             Text(text = appartement.numero, style = MaterialTheme.typography.bodyMedium)
             Text(text = appartement.pieces_principales, style = MaterialTheme.typography.bodyLarge)
             Text(text = appartement.surface, style = MaterialTheme.typography.bodyLarge)
+            Text(text = appartement.batiment.adresse, style = MaterialTheme.typography.bodyLarge)
         }
     }
 }

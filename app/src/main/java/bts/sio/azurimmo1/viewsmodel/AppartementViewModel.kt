@@ -5,9 +5,13 @@ import androidx.compose.runtime.*
 import androidx.lifecycle.viewModelScope
 
 import bts.sio.azurimmo1.model.Appartement
+import bts.sio.azurimmo1.model.Batiment
 import kotlinx.coroutines.launch
+
+
+
 class AppartementViewModel : ViewModel() {
-    // Liste mutable des appartements
+    // Liste mutable des bâtiments
     private val _appartements = mutableStateOf<List<Appartement>>(emptyList())
     val appartements: State<List<Appartement>> = _appartements
     private val _isLoading = mutableStateOf(false)
@@ -18,7 +22,9 @@ class AppartementViewModel : ViewModel() {
     init {
 // Simuler un chargement de données initiales
         getAppartements()
+        println("marchepas")
     }
+
     private fun getAppartements() {
         viewModelScope.launch {
             _isLoading.value = true

@@ -19,7 +19,9 @@ class BatimentViewModel : ViewModel() {
     init {
 // Simuler un chargement de données initiales
         getBatiments()
+        println("marchepas")
     }
+
     private fun getBatiments() {
         viewModelScope.launch {
             _isLoading.value = true
@@ -34,6 +36,4 @@ class BatimentViewModel : ViewModel() {
             }
         }
     }
-
-
 }

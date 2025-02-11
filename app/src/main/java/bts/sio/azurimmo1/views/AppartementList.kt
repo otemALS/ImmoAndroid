@@ -11,6 +11,8 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
+import bts.sio.azurimmo1.model.Appartement
+
 
 
 @Composable
@@ -39,7 +41,7 @@ fun AppartementList( viewModel: AppartementViewModel = viewModel()) {
             else -> {
                 LazyColumn {
                     items(appartements) { appartement ->
-                        AppartementCard(appartement = appartement) // Appel de la fonction BatimentCard
+                        AppartementCard(appartement = appartement)
                     }
                 }
             }

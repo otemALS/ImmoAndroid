@@ -21,23 +21,11 @@ class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContent {
-            AppartementList()
+            MainScreen()
         }
     }
 }
 
-    // Fonction pour prévisualiser BatimentList uniquement
-    @Preview(showBackground = true)
-    @Composable
-    fun PreviewBatimentList() {
-        BatimentList()
-    }
 
-    // Fonction pour prévisualiser AppartementList uniquement
-    @Preview(showBackground = true)
-    @Composable
-    fun PreviewAppartementList() {
-        AppartementList()
-    }
 
 

@@ -13,11 +13,17 @@ import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 
 
+// Fonction Composable pour afficher la liste des bâtiments
 @Composable
-fun BatimentList( viewModel: BatimentViewModel = viewModel()) {
+fun BatimentList(
+    viewModel: BatimentViewModel = viewModel(),
+    onBatimentClick: (Int) -> Unit
+) {
+
     val batiments = viewModel.batiments.value
     val isLoading = viewModel.isLoading.value
     val errorMessage = viewModel.errorMessage.value
+
     Box(modifier = Modifier.fillMaxSize()) {
         when {
             isLoading -> {
@@ -25,7 +31,6 @@ fun BatimentList( viewModel: BatimentViewModel = viewModel()) {
                     modifier = Modifier.align(Alignment.Center)
                 )
             }
-
             errorMessage != null -> {
                 Text(
                     text = errorMessage ?: "Erreur inconnue",
@@ -35,14 +40,18 @@ fun BatimentList( viewModel: BatimentViewModel = viewModel()) {
                     color = MaterialTheme.colorScheme.error
                 )
             }
-
             else -> {
                 LazyColumn {
                     items(batiments) { batiment ->
-                        BatimentCard(batiment = batiment) // Appel de la fonction BatimentCard
+                        BatimentCard(
+                            batiment = batiment,
+                            onClick = { onBatimentClick(batiment.id) }
+                        )
                     }
                 }
             }
         }
     }
+
+
 }

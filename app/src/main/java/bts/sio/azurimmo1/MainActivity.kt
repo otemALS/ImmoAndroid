@@ -21,10 +21,10 @@ class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContent {
-            // Appel de la fonction principale pour structurer l'affichage
-            AppartementList()
+            BatimentList()
         }
     }
+}
 
     // Fonction pour prévisualiser BatimentList uniquement
     @Preview(showBackground = true)
@@ -39,5 +39,5 @@ class MainActivity : ComponentActivity() {
     fun PreviewAppartementList() {
         AppartementList()
     }
-}
+
 

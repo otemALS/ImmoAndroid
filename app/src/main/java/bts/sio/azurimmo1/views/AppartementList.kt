@@ -17,9 +17,11 @@ import bts.sio.azurimmo1.model.Appartement
 
 @Composable
 fun AppartementList( viewModel: AppartementViewModel = viewModel()) {
+
     val appartements = viewModel.appartements.value
     val isLoading = viewModel.isLoading.value
     val errorMessage = viewModel.errorMessage.value
+
     Box(modifier = Modifier.fillMaxSize()) {
         when {
             isLoading -> {
@@ -27,7 +29,6 @@ fun AppartementList( viewModel: AppartementViewModel = viewModel()) {
                     modifier = Modifier.align(Alignment.Center)
                 )
             }
-
             errorMessage != null -> {
                 Text(
                     text = errorMessage ?: "Erreur inconnue",
@@ -37,14 +38,12 @@ fun AppartementList( viewModel: AppartementViewModel = viewModel()) {
                     color = MaterialTheme.colorScheme.error
                 )
             }
-
             else -> {
                 LazyColumn {
                     items(appartements) { appartement ->
                         AppartementCard(appartement = appartement) // Appel de la fonction BatimentCard
                     }
                 }
-
             }
         }
     }

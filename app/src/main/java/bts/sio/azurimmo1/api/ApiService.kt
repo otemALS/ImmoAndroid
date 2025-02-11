@@ -12,9 +12,7 @@ interface ApiService {
 
     @GET("api/appartements/")
     suspend fun getAppartements(): List<Appartement>
-
-
-
-    @GET("api/interventions/")
-    suspend fun getInterventions(): List<Intervention>
+    abstract fun getInterventions(): List<Intervention>
 }
+
+

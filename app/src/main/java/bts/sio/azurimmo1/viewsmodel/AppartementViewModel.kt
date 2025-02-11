@@ -39,4 +39,19 @@ class AppartementViewModel : ViewModel() {
             }
         }
     }
+
+    fun getAppartementsByBatimentId(batimentId: Int) {
+        viewModelScope.launch {
+            _isLoading.value = true
+            try {
+                val response = RetrofitInstance.api.getAppartementsByBatimentId(batimentId)
+                _appartements.value = response
+            } catch (e: Exception) {
+                _errorMessage.value = "Erreur : ${e.message}"
+            } finally {
+                _isLoading.value = false
+            }
+        }
+    }
 }
+

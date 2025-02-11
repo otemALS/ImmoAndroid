@@ -72,7 +72,7 @@ dependencies {
     implementation(libs.navigation.compose)
     implementation(libs.ui) // Remplacez par la dernière version
     implementation(libs.androidx.foundation)
-
+    implementation(libs.navigation.compose)
 
 
 }

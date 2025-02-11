@@ -14,8 +14,10 @@ import androidx.compose.ui.unit.dp
 import bts.sio.azurimmo1.model.Appartement
 import bts.sio.azurimmo1.model.Batiment
 
-@Composable
 
+
+
+@Composable
 
 fun AppartementCard(appartement: Appartement) {
     Card(
@@ -28,40 +30,11 @@ fun AppartementCard(appartement: Appartement) {
         Column(
             modifier = Modifier.padding(16.dp)
         ) {
-
-            Row {
-                Text(
-                    text = "Numero : ",
-                    style = MaterialTheme.typography.bodyLarge.copy(fontWeight = FontWeight.Bold)
-                )
-                Text(
-                    text =appartement.numero,
-                    style = MaterialTheme.typography.bodyLarge
-                )
-            }
-
-            Row {
-                Text(
-                    text = "Description : ",
-                    style = MaterialTheme.typography.bodyLarge.copy(fontWeight = FontWeight.Bold)
-                )
-                Text(
-                    text =appartement.description,
-                    style = MaterialTheme.typography.bodyLarge
-                )
-            }
-
-            Row {
-                Text(
-                    text = "Surface : ",
-                    style = MaterialTheme.typography.bodyLarge.copy(fontWeight = FontWeight.Bold)
-                )
-                Text(
-                    text = String.format("%.2f", appartement.surface),
-                    style = MaterialTheme.typography.bodyLarge
-                )
-            }
+            Text(text = appartement.description ?: "Pas de description", style = MaterialTheme.typography.bodyLarge)
+            Text(text = appartement.numero ?: "Numéro inconnu", style = MaterialTheme.typography.bodyMedium)
+            Text(text = appartement.pieces_principales ?: "Non spécifié", style = MaterialTheme.typography.bodyLarge)
+            Text(text = appartement.surface ?: "Surface inconnue", style = MaterialTheme.typography.bodyLarge)
+            Text(text = appartement.batiment?.adresse ?: "Adresse inconnue", style = MaterialTheme.typography.bodyLarge)
         }
     }
 }
-

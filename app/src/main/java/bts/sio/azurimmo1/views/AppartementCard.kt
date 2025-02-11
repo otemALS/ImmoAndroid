@@ -13,7 +13,8 @@ import bts.sio.azurimmo1.model.Appartement
 import bts.sio.azurimmo1.model.Batiment
 
 @Composable
-fun AppartementCard(appartement: Appartement) { // Notez l'annotation @Composable
+
+fun AppartementCard(appartement: Appartement) {
     Card(
         modifier = Modifier
             .fillMaxWidth()
@@ -24,11 +25,12 @@ fun AppartementCard(appartement: Appartement) { // Notez l'annotation @Composabl
         Column(
             modifier = Modifier.padding(16.dp)
         ) {
-            Text(text = appartement.description, style = MaterialTheme.typography.bodyLarge)
-            Text(text = appartement.numero, style = MaterialTheme.typography.bodyMedium)
-            Text(text = appartement.pieces_principales, style = MaterialTheme.typography.bodyLarge)
-            Text(text = appartement.surface, style = MaterialTheme.typography.bodyLarge)
-            Text(text = appartement.batiment.adresse, style = MaterialTheme.typography.bodyLarge)
+            Text(text = appartement.description ?: "Pas de description", style = MaterialTheme.typography.bodyLarge)
+            Text(text = appartement.numero ?: "Numéro inconnu", style = MaterialTheme.typography.bodyMedium)
+            Text(text = appartement.pieces_principales ?: "Non spécifié", style = MaterialTheme.typography.bodyLarge)
+            Text(text = appartement.surface ?: "Surface inconnue", style = MaterialTheme.typography.bodyLarge)
+            Text(text = appartement.batiment?.adresse ?: "Adresse inconnue", style = MaterialTheme.typography.bodyLarge)
         }
     }
 }
+

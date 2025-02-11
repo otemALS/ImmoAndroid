@@ -70,6 +70,9 @@ dependencies {
     implementation(libs.retrofit)
     implementation(libs.retrofit.gson)
     implementation(libs.navigation.compose)
+    implementation(libs.ui) // Remplacez par la dernière version
+    implementation(libs.androidx.foundation)
+
 
 
 }

@@ -40,10 +40,11 @@ fun AppartementList( viewModel: AppartementViewModel = viewModel()) {
 
             else -> {
                 LazyColumn {
-                    items(appartements) { appartement ->
+                    items(appartements, key = { it.numero }) { appartement ->
                         AppartementCard(appartement = appartement)
                     }
                 }
+
             }
         }
     }

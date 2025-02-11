@@ -13,6 +13,8 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
+import bts.sio.azurimmo1.model.Appartement
+import bts.sio.azurimmo1.model.Batiment
 import bts.sio.azurimmo1.ui.theme.Azurimmo1Theme
 
 class MainActivity : ComponentActivity() {

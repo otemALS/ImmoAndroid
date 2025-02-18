@@ -11,8 +11,10 @@ import androidx.compose.material3.Button
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextField
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
@@ -26,6 +28,7 @@ fun AppartementAdd(onAddAppartement: (Appartement) -> Unit, batimentId: Int) {
     val viewModel: AppartementViewModel = viewModel()
     var description by remember { mutableStateOf("") }
     var numero by remember { mutableStateOf("") }
+    var nbrePieces by remember { mutableStateOf("") }
     Column(
         modifier = Modifier
             .fillMaxSize()
@@ -45,6 +48,13 @@ fun AppartementAdd(onAddAppartement: (Appartement) -> Unit, batimentId: Int) {
             modifier = Modifier.fillMaxWidth()
         )
         Spacer(modifier = Modifier.height(16.dp))
+        TextField(
+            value = nbrePieces,
+            onValueChange = { nbrePieces = it },
+            label = { Text("Nombre de pièces") },
+            modifier = Modifier.fillMaxWidth()
+        )
+        Spacer(modifier = Modifier.height(16.dp))
         Button(
             onClick = {
                 val batiment = Batiment(id = batimentId, adresse = "zouzou", ville = "labas") // seul l’id nous interesse ici
@@ -53,7 +63,8 @@ fun AppartementAdd(onAddAppartement: (Appartement) -> Unit, batimentId: Int) {
                     numero = numero,
                     description = description,
                     surface = 10.2f,
-                    batiment = batiment
+                    batiment = batiment,
+                    nbrePieces = nbrePieces.toInt()
                 )
                 viewModel.addAppartement(appartement)
                 onAddAppartement(appartement)

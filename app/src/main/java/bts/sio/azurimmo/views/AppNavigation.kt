@@ -75,8 +75,4 @@ fun AppNavigation(navController: NavHostController, modifier: Modifier = Modifie
             }
         }
     }
-
-
-
-
 }

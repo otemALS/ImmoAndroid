@@ -26,7 +26,7 @@ fun AppartementList(
 ) {
 
     val viewModelBat: BatimentViewModel = viewModel()
-    val appartements = viewModel.appartements.value
+    val appartements = viewModel.appartements.value.filter { it.batiment.id == batimentId }
     val batiment = viewModelBat.batiment.value
     val isLoading = viewModel.isLoading.value
     val errorMessage = viewModel.errorMessage.value

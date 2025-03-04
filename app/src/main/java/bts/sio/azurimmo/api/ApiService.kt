@@ -36,7 +36,7 @@ interface ApiService {
     @GET("api/batiments/{id}")
     suspend fun getBatimentById(@Path("id") id: Int): Batiment
 
-    @GET("/api/appartements/batiment/{batimentId}")
+    @GET("api/appartements/batiment/{batimentId}")
     suspend fun getAppartementsByBatimentId(@Path("batimentId") batimentId: Int): List<Appartement>
 
     @POST("api/batiments/")

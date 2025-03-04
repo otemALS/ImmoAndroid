@@ -67,6 +67,7 @@ fun AppartementAdd(onAddAppartement: (Appartement) -> Unit, batimentId: Int) {
                     nbrePieces = nbrePieces.toInt()
                 )
                 viewModel.addAppartement(appartement)
+                viewModel.getAppartementsByBatimentId(batimentId)
                 onAddAppartement(appartement)
             },
             modifier = Modifier.align(Alignment.End)

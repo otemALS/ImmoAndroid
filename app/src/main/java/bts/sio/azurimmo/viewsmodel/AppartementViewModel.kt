@@ -9,7 +9,7 @@ import kotlinx.coroutines.launch
 
 class AppartementViewModel : ViewModel() {
 
-    // Liste mutable des bâtiments
+    // Liste mutable des appartements
     private val _appartements = mutableStateOf<List<Appartement>>(emptyList())
     val appartements: State<List<Appartement>> = _appartements
 
@@ -18,6 +18,7 @@ class AppartementViewModel : ViewModel() {
 
     private val _errorMessage = mutableStateOf<String?>(null)
     val errorMessage: State<String?> = _errorMessage
+
 
     init {
         // Simuler un chargement de données initiales
@@ -45,7 +46,7 @@ class AppartementViewModel : ViewModel() {
             try {
                 val response = RetrofitInstance.api.getAppartementsByBatimentId(batimentId)
                 if (response.isNotEmpty()) {
-                    _appartements.value = response
+                    _appartements.value = response.filter { it.batiment.id == batimentId }
                     println("Appartements chargés : $response")
                 } else {
                     println("Aucun appartement trouvé pour le bâtiment $batimentId")

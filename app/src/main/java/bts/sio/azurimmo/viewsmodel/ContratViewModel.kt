@@ -34,4 +34,44 @@ class ContratViewModel : ViewModel() {
             }
         }
     }
+
+    fun deleteContrat(id: Int, onSuccess: () -> Unit) {
+        viewModelScope.launch {
+            _isLoading.value = true
+            try {
+                val response = RetrofitInstance.api.deleteContrat(id)
+                if (response.isSuccessful) {
+                    getContrats()
+                    onSuccess()
+                } else {
+                    _errorMessage.value = "Erreur suppression : ${response.message()}"
+                }
+            } catch (e: Exception) {
+                _errorMessage.value = "Erreur : ${e.message}"
+            } finally {
+                _isLoading.value = false
+            }
+        }
+    }
+
+    fun updateContrat(contrat: Contrat, onSuccess: () -> Unit) {
+        viewModelScope.launch {
+            _isLoading.value = true
+            try {
+                val response = RetrofitInstance.api.updateContrat(contrat.id, contrat)
+                if (response.isSuccessful) {
+                    getContrats()
+                    onSuccess()
+                } else {
+                    _errorMessage.value = "Erreur mise à jour : ${response.message()}"
+                }
+            } catch (e: Exception) {
+                _errorMessage.value = "Erreur : ${e.message}"
+            } finally {
+                _isLoading.value = false
+            }
+        }
+    }
+
+
 }

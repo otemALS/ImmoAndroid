@@ -56,5 +56,12 @@ interface ApiService {
         @Body appartement: Appartement
     ): Response<Appartement>
 
+    @DELETE("api/contrats/{id}")
+    suspend fun deleteContrat(@Path("id") id: Int): Response<Void>
+
+    @PUT("api/contrats/{id}")
+    suspend fun updateContrat(@Path("id") id: Int, @Body contrat: Contrat): Response<Contrat>
+
+
 
 }

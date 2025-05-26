@@ -1,6 +1,5 @@
 package bts.sio.azurimmo.views.appartement
 
-import AppartementViewModel
 import androidx.compose.foundation.layout.*
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
@@ -9,24 +8,27 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import bts.sio.azurimmo.model.Appartement
-import bts.sio.azurimmo.model.Batiment
+import AppartementViewModel
 
 @Composable
-fun AppartementAdd(onAddAppartement: (Appartement) -> Unit, batimentId: Int) {
+fun EditAppartement(
+    appartement: Appartement,
+    onUpdated: () -> Unit
+) {
+    // ✅ Corrigé ici : récupération du ViewModel
     val viewModel: AppartementViewModel = viewModel()
 
-    var description by remember { mutableStateOf("") }
-    var numero by remember { mutableStateOf("") }
-    var nbrePieces by remember { mutableStateOf("") }
-    var surface by remember { mutableStateOf("") }
+    var numero by remember { mutableStateOf(appartement.numero) }
+    var description by remember { mutableStateOf(appartement.description) }
+    var surface by remember { mutableStateOf(appartement.surface.toString()) }
+    var nbrePieces by remember { mutableStateOf(appartement.nbrePieces.toString()) }
 
     Column(
         modifier = Modifier
             .fillMaxSize()
             .padding(16.dp)
     ) {
-        Text("Ajout d'un appartement", style = MaterialTheme.typography.titleLarge)
-
+        Text("Modifier l'appartement", style = MaterialTheme.typography.titleLarge)
         Spacer(modifier = Modifier.height(16.dp))
 
         TextField(
@@ -35,17 +37,15 @@ fun AppartementAdd(onAddAppartement: (Appartement) -> Unit, batimentId: Int) {
             label = { Text("Numéro") },
             modifier = Modifier.fillMaxWidth()
         )
-
-        Spacer(modifier = Modifier.height(16.dp))
+        Spacer(modifier = Modifier.height(8.dp))
 
         TextField(
             value = surface,
             onValueChange = { surface = it },
-            label = { Text("Surface (m²)") },
+            label = { Text("Surface") },
             modifier = Modifier.fillMaxWidth()
         )
-
-        Spacer(modifier = Modifier.height(16.dp))
+        Spacer(modifier = Modifier.height(8.dp))
 
         TextField(
             value = nbrePieces,
@@ -53,8 +53,7 @@ fun AppartementAdd(onAddAppartement: (Appartement) -> Unit, batimentId: Int) {
             label = { Text("Nombre de pièces") },
             modifier = Modifier.fillMaxWidth()
         )
-
-        Spacer(modifier = Modifier.height(16.dp))
+        Spacer(modifier = Modifier.height(8.dp))
 
         TextField(
             value = description,
@@ -62,27 +61,23 @@ fun AppartementAdd(onAddAppartement: (Appartement) -> Unit, batimentId: Int) {
             label = { Text("Description") },
             modifier = Modifier.fillMaxWidth()
         )
-
         Spacer(modifier = Modifier.height(24.dp))
 
         Button(
             onClick = {
-                val batiment = Batiment(id = batimentId, adresse = "", ville = "")
-                val appartement = Appartement(
-                    id = 0,
+                val updated = appartement.copy(
                     numero = numero,
-                    description = description,
                     surface = surface.toFloatOrNull() ?: 0f,
-                    batiment = batiment,
-                    nbrePieces = nbrePieces.toIntOrNull() ?: 0
+                    nbrePieces = nbrePieces.toIntOrNull() ?: 0,
+                    description = description
                 )
-                viewModel.addAppartement(appartement)
-                viewModel.getAppartementsByBatimentId(batimentId)
-                onAddAppartement(appartement)
+                viewModel.updateAppartement(updated) {
+                    onUpdated()
+                }
             },
             modifier = Modifier.align(Alignment.End)
         ) {
-            Text("Ajouter l'appartement")
+            Text("Enregistrer")
         }
     }
 }

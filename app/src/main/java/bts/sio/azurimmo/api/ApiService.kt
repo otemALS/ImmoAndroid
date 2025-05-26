@@ -8,29 +8,31 @@ import bts.sio.azurimmo.model.Locataire
 import bts.sio.azurimmo.model.Paiement
 import retrofit2.Response
 import retrofit2.http.Body
+import retrofit2.http.DELETE
 import retrofit2.http.POST
+import retrofit2.http.PUT
 import retrofit2.http.Path
 
 interface ApiService {
-    @GET("api/batiments/")
+    @GET("api/batiments")
     suspend fun getBatiments(): List<Batiment>
 
-    @GET("api/appartements/")
+    @GET("api/appartements")
     suspend fun getAppartements(): List<Appartement>
 
-    @GET("api/contrats/")
+    @GET("api/contrats")
     suspend fun getContrats(): List<Contrat>
 
-    @GET("api/interventions/")
+    @GET("api/interventions")
     suspend fun getInterventions(): List<Intervention>
 
-    @GET("api/garants/")
+    @GET("api/garants")
     suspend fun getGarants(): List<Garant>
 
-    @GET("api/paiements/")
+    @GET("api/paiements")
     suspend fun getPaiements(): List<Paiement>
 
-    @GET("api/locataires/")
+    @GET("api/locataires")
     suspend fun getLocataires(): List<Locataire>
 
     @GET("api/batiments/{id}")
@@ -44,4 +46,15 @@ interface ApiService {
 
     @POST("api/appartements/")
     suspend fun addAppartement(@Body appartement: Appartement): Response<Appartement>
+
+    @DELETE("api/appartements/{id}")
+    suspend fun deleteAppartement(@Path("id") id: Int): retrofit2.Response<Void>
+
+    @PUT("api/appartements/{id}")
+    suspend fun updateAppartement(
+        @Path("id") id: Int,
+        @Body appartement: Appartement
+    ): Response<Appartement>
+
+
 }

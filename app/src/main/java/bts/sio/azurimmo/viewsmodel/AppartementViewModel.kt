@@ -25,7 +25,7 @@ class AppartementViewModel : ViewModel() {
         getAppartements()
     }
 
-    private fun getAppartements() {
+    fun getAppartements() {
         viewModelScope.launch {
             _isLoading.value = true
             try {
@@ -78,5 +78,43 @@ class AppartementViewModel : ViewModel() {
             }
         }
     }
+
+    fun deleteAppartement(id: Int, onDeleted: () -> Unit) {
+        viewModelScope.launch {
+            _isLoading.value = true
+            try {
+                val response = RetrofitInstance.api.deleteAppartement(id)
+                if (response.isSuccessful) {
+                    onDeleted()
+                } else {
+                    _errorMessage.value = "Erreur suppression : ${response.message()}"
+                }
+            } catch (e: Exception) {
+                _errorMessage.value = "Erreur : ${e.message}"
+            } finally {
+                _isLoading.value = false
+            }
+        }
+    }
+
+    fun updateAppartement(appartement: Appartement, onSuccess: () -> Unit) {
+        viewModelScope.launch {
+            _isLoading.value = true
+            try {
+                val response = RetrofitInstance.api.updateAppartement(appartement.id!!, appartement)
+                if (response.isSuccessful) {
+                    onSuccess()
+                } else {
+                    _errorMessage.value = "Erreur mise à jour : ${response.message()}"
+                }
+            } catch (e: Exception) {
+                _errorMessage.value = "Erreur : ${e.message}"
+            } finally {
+                _isLoading.value = false
+            }
+        }
+    }
+
+
 
 }

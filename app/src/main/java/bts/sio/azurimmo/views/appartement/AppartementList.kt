@@ -112,7 +112,7 @@ fun AppartementList(
                     }
                 }
 
-                // ✅ FAB
+                // ✅ FAB ajout
                 FloatingActionButton(
                     onClick = onAddAppartementClick,
                     modifier = Modifier
@@ -143,6 +143,7 @@ fun AppartementList(
                             TextButton(onClick = {
                                 selectedAppartement?.id?.let { id ->
                                     viewModel.deleteAppartement(id) {
+                                        println(">>> Appartement supprimé : $id")
                                         viewModel.getAppartementsByBatimentId(batimentId)
                                     }
                                 }

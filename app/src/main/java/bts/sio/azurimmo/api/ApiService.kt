@@ -33,7 +33,7 @@ interface ApiService {
     suspend fun getPaiements(): List<Paiement>
 
     @GET("api/locataires")
-    suspend fun getLocataires(): List<Locataire>
+    suspend fun getLocataires(): Response<List<Locataire>>
 
     @GET("api/batiments/{id}")
     suspend fun getBatimentById(@Path("id") id: Int): Batiment
@@ -41,14 +41,15 @@ interface ApiService {
     @GET("api/appartements/batiment/{batimentId}")
     suspend fun getAppartementsByBatimentId(@Path("batimentId") batimentId: Int): List<Appartement>
 
-    @POST("api/batiments/")
+    @POST("api/batiments")
     suspend fun addBatiment(@Body batiment: Batiment): Response<Batiment>
 
-    @POST("api/appartements/")
+    @POST("api/appartements")
     suspend fun addAppartement(@Body appartement: Appartement): Response<Appartement>
 
     @DELETE("api/appartements/{id}")
-    suspend fun deleteAppartement(@Path("id") id: Int): retrofit2.Response<Void>
+    suspend fun deleteAppartement(@Path("id") id: Int): Response<Void>
+
 
     @PUT("api/appartements/{id}")
     suspend fun updateAppartement(
@@ -62,6 +63,33 @@ interface ApiService {
     @PUT("api/contrats/{id}")
     suspend fun updateContrat(@Path("id") id: Int, @Body contrat: Contrat): Response<Contrat>
 
+    @POST("api/locataires")
+    suspend fun addLocataire(@Body locataire: Locataire): Response<Locataire>
+
+    @PUT("api/locataires/{id}")
+    suspend fun updateLocataire(@Path("id") id: Int, @Body locataire: Locataire): Response<Locataire>
+
+    @DELETE("api/locataires/{id}")
+    suspend fun deleteLocataire(@Path("id") id: Int): Response<Void>
+
+
+    @POST("api/contrats")
+    suspend fun addContrat(@Body contrat: Contrat): Response<Contrat>
+
+    @POST("api/paiements")
+    suspend fun addPaiement(@Body paiement: Paiement): retrofit2.Response<Paiement>
+
+    @PUT("api/paiements/{id}")
+    suspend fun updatePaiement(@Path("id") id: Int, @Body paiement: Paiement): retrofit2.Response<Paiement>
+
+    @DELETE("api/paiements/{id}")
+    suspend fun deletePaiement(@Path("id") id: Int): retrofit2.Response<Void>
 
 
 }
+
+
+
+
+
+

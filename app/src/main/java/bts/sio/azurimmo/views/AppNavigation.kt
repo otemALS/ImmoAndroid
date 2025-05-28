@@ -1,7 +1,6 @@
 package bts.sio.azurimmo.views
 
 import AppartementViewModel
-import ContratList
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
@@ -11,11 +10,23 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.navArgument
 import androidx.lifecycle.viewmodel.compose.viewModel
+import bts.sio.azurimmo.viewmodel.ContratViewModel
+import bts.sio.azurimmo.viewmodel.PaiementViewModel
+import bts.sio.azurimmo.viewsmodel.LocataireViewModel
 import bts.sio.azurimmo.views.appartement.*
 import bts.sio.azurimmo.views.batiment.BatimentAdd
 import bts.sio.azurimmo.views.batiment.BatimentList
 import bts.sio.azurimmo.views.contrat.EditContrat
-import ContratViewModel
+import bts.sio.azurimmo.views.contrat.AddContrat
+import bts.sio.azurimmo.views.contrat.ContratList
+import bts.sio.azurimmo.views.locataire.AddLocataire
+import bts.sio.azurimmo.views.locataire.EditLocataire
+import bts.sio.azurimmo.views.locataire.LocataireList
+import bts.sio.azurimmo.views.paiement.AddPaiement
+import bts.sio.azurimmo.views.paiement.EditPaiement
+import bts.sio.azurimmo.views.paiement.PaiementList
+
+
 
 @Composable
 fun AppNavigation(navController: NavHostController, modifier: Modifier = Modifier) {
@@ -76,8 +87,12 @@ fun AppNavigation(navController: NavHostController, modifier: Modifier = Modifie
         }
 
         composable("appartement_list") {
-            AppartementListGlobal(onAddClick = { navController.navigate("add_appartement_global") })
+            AppartementListGlobal(
+                navController = navController,
+                onAddClick = { navController.navigate("add_appartement_global") }
+            )
         }
+
 
         composable("add_appartement_global") {
             AppartementAddGlobal(onAppartementAdded = { navController.popBackStack() })
@@ -113,5 +128,102 @@ fun AppNavigation(navController: NavHostController, modifier: Modifier = Modifie
                 Text("Contrat introuvable")
             }
         }
+
+        composable("locataire_list") {
+            LocataireList(navController = navController)
+        }
+
+        composable(
+            "edit_locataire/{id}",
+            arguments = listOf(navArgument("id") { type = NavType.IntType })
+        ) { backStackEntry ->
+            val id = backStackEntry.arguments?.getInt("id") ?: return@composable
+            val viewModel: LocataireViewModel = viewModel()
+            val locataire = viewModel.locataires.value.find { it.id == id }
+
+            if (locataire != null) {
+                EditLocataire(
+                    locataire = locataire,
+                    onUpdated = {
+                        viewModel.getLocataires() // ✅ Recharge la liste après modification
+                        navController.popBackStack() // ✅ Retour à la liste
+                    }
+                )
+            } else {
+                Text("Locataire introuvable")
+            }
+        }
+
+        composable("add_locataire") {
+            AddLocataire(onLocataireAdded = {
+                navController.popBackStack()
+            })
+        }
+
+        composable("edit_locataire/{id}",
+            arguments = listOf(navArgument("id") { type = NavType.IntType })
+        ) { backStackEntry ->
+            val id = backStackEntry.arguments?.getInt("id") ?: return@composable
+            val locataire = viewModel<LocataireViewModel>().locataires.value.find { it.id == id }
+            if (locataire != null) {
+                EditLocataire(locataire = locataire, onUpdated = { navController.popBackStack() })
+            } else {
+                Text("Locataire introuvable")
+            }
+        }
+
+        composable("add_contrat") {
+            AddContrat(onContractAdded = { navController.popBackStack() })
+
+        }
+
+        composable("edit_contrat/{id}",
+            arguments = listOf(navArgument("id") { type = NavType.IntType })
+        ) { backStackEntry ->
+            val id = backStackEntry.arguments?.getInt("id")
+            val contrat = viewModel<ContratViewModel>().contrats.value.find { it.id == id }
+            if (contrat != null) {
+                EditContrat(contrat = contrat) {
+                    navController.popBackStack()
+                }
+            } else {
+                Text("Contrat introuvable")
+            }
+        }
+        composable("paiement_list") {
+            PaiementList(
+                navController = navController,
+                onAddClick = { navController.navigate("add_paiement") }
+            )
+        }
+
+        composable("add_paiement") {
+            AddPaiement(onPaiementAdded = { navController.popBackStack() })
+        }
+
+        composable(
+            "edit_paiement/{id}",
+            arguments = listOf(navArgument("id") { type = NavType.IntType })
+        ) { backStackEntry ->
+            val id = backStackEntry.arguments?.getInt("id") ?: return@composable
+            val paiement = viewModel<PaiementViewModel>().paiements.value.find { it.id == id }
+            if (paiement != null) {
+                EditPaiement(
+                    paiement = paiement,
+                    viewModel = viewModel(),
+                    onUpdated = { navController.popBackStack() }
+                )
+            } else {
+                Text("Paiement introuvable")
+            }
+
+        }
+
+
+
+
+
     }
+
+
 }

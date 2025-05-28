@@ -12,9 +12,12 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
+import androidx.navigation.NavHostController
+import bts.sio.azurimmo.model.Appartement
 
 @Composable
 fun AppartementListGlobal(
+    navController: NavHostController,
     viewModel: AppartementViewModel = viewModel(),
     onAddClick: () -> Unit
 ) {
@@ -22,8 +25,11 @@ fun AppartementListGlobal(
     val isLoading = viewModel.isLoading.value
     val errorMessage = viewModel.errorMessage.value
 
+    var selectedAppartement by remember { mutableStateOf<Appartement?>(null) }
+    var showDialog by remember { mutableStateOf(false) }
+
     LaunchedEffect(Unit) {
-        viewModel.getAppartements() // sans filtre
+        viewModel.getAppartements()
     }
 
     Box(modifier = Modifier.fillMaxSize()) {
@@ -44,10 +50,44 @@ fun AppartementListGlobal(
                     LazyColumn {
                         items(appartements) { appartement ->
                             AppartementCard(
-                                appartement,
-                                onClick = TODO()
+                                appartement = appartement,
+                                onClick = {
+                                    selectedAppartement = it
+                                    showDialog = true
+                                }
                             )
                         }
+                    }
+
+                    if (showDialog && selectedAppartement != null) {
+                        AlertDialog(
+                            onDismissRequest = { showDialog = false },
+                            title = { Text("Action sur l'appartement ${selectedAppartement?.numero}") },
+                            text = { Text("Voulez-vous modifier ou supprimer cet appartement ?") },
+                            confirmButton = {
+                                TextButton(onClick = {
+                                    selectedAppartement?.let {
+                                        navController.navigate("edit_appartement/${it.id}")
+                                    }
+                                    showDialog = false
+                                }) {
+                                    Text("Modifier")
+                                }
+                            },
+                            dismissButton = {
+                                TextButton(onClick = {
+                                    selectedAppartement?.id?.let { id ->
+                                        viewModel.deleteAppartement(id) {
+                                            println(">>> Supprimé appartement : $id")
+                                            viewModel.getAppartements()
+                                        }
+                                    }
+                                    showDialog = false
+                                }) {
+                                    Text("Supprimer")
+                                }
+                            }
+                        )
                     }
                 }
             }

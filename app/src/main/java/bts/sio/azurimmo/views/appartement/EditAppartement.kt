@@ -72,6 +72,8 @@ fun EditAppartement(
                     description = description
                 )
                 viewModel.updateAppartement(updated) {
+                    println(">>> Appartement mis à jour : $updated")
+
                     onUpdated()
                 }
             },

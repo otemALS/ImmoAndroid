@@ -27,7 +27,6 @@ fun HomeScreen(navController: NavHostController) {
             navController.navigate("batiment_list")
         }
 
-
         HomeCard(title = "📄 Contrats") {
             navController.navigate("contrat_list")
         }
@@ -36,12 +35,16 @@ fun HomeScreen(navController: NavHostController) {
             navController.navigate("locataire_list")
         }
 
-        HomeCard("🏠 Appartements") {
+        HomeCard(title = "🏠 Appartements") {
             navController.navigate("appartement_list")
         }
 
+        HomeCard(title = "💰 Paiements") {
+            navController.navigate("paiement_list")
+        }
     }
 }
+
 
 @Composable
 fun HomeCard(title: String, onClick: () -> Unit) {

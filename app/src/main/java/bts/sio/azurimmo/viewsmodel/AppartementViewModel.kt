@@ -79,23 +79,28 @@ class AppartementViewModel : ViewModel() {
         }
     }
 
-    fun deleteAppartement(id: Int, onDeleted: () -> Unit) {
+    fun deleteAppartement(id: Int, onSuccess: (Boolean) -> Unit) {
         viewModelScope.launch {
-            _isLoading.value = true
             try {
                 val response = RetrofitInstance.api.deleteAppartement(id)
                 if (response.isSuccessful) {
-                    onDeleted()
+                    println(">>> Appartement supprimé avec succès")
+                    getAppartements()
+                    onSuccess(true)
                 } else {
-                    _errorMessage.value = "Erreur suppression : ${response.message()}"
+                    val errorText = response.errorBody()?.string()
+                    println(">>> Erreur suppression : ${response.code()} - $errorText")
+                    _errorMessage.value = "Erreur suppression : ${response.code()} - $errorText"
+                    onSuccess(false)
                 }
             } catch (e: Exception) {
+                println(">>> Exception suppression : ${e.message}")
                 _errorMessage.value = "Erreur : ${e.message}"
-            } finally {
-                _isLoading.value = false
+                onSuccess(false)
             }
         }
     }
+
 
     fun updateAppartement(appartement: Appartement, onSuccess: () -> Unit) {
         viewModelScope.launch {

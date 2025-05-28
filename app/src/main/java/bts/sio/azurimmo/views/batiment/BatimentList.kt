@@ -63,7 +63,8 @@ fun BatimentList(
                         items(batiments) { batiment ->
                             BatimentCard(
                                 batiment = batiment,
-                                onClick = { onBatimentClick(batiment.id) }
+                                onClick = { batiment.id?.let { onBatimentClick(it) } }
+
                             )
                         }
                     }

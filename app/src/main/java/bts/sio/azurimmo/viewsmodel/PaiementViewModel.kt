@@ -1,37 +1,29 @@
+package bts.sio.azurimmo.viewmodel
+
 import androidx.lifecycle.ViewModel
-import androidx.compose.runtime.State
-import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.viewModelScope
 import bts.sio.azurimmo.api.RetrofitInstance
 import bts.sio.azurimmo.model.Paiement
 import kotlinx.coroutines.launch
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.State
 
 class PaiementViewModel : ViewModel() {
 
-    // Liste mutable des interventions
     private val _paiements = mutableStateOf<List<Paiement>>(emptyList())
     val paiements: State<List<Paiement>> = _paiements
 
-    // État de chargement
     private val _isLoading = mutableStateOf(false)
     val isLoading: State<Boolean> = _isLoading
 
-    // Message d'erreur
     private val _errorMessage = mutableStateOf<String?>(null)
     val errorMessage: State<String?> = _errorMessage
 
-    init {
-        // Charger les interventions au démarrage
-        getPaiements()
-    }
-
-    private fun getPaiements() {
+    fun getPaiements() {
         viewModelScope.launch {
             _isLoading.value = true
             try {
-                // Appel de l'API
-                val response = RetrofitInstance.api.getPaiements()
-                _paiements.value = response
+                _paiements.value = RetrofitInstance.api.getPaiements()
             } catch (e: Exception) {
                 _errorMessage.value = "Erreur : ${e.message}"
             } finally {
@@ -39,4 +31,58 @@ class PaiementViewModel : ViewModel() {
             }
         }
     }
+
+    fun addPaiement(paiement: Paiement, onSuccess: (Boolean) -> Unit) {
+        viewModelScope.launch {
+            try {
+                val response = RetrofitInstance.api.addPaiement(paiement)
+                if (response.isSuccessful) {
+                    getPaiements()
+                    onSuccess(true)
+                } else {
+                    _errorMessage.value = "Erreur ajout : ${response.message()}"
+                    onSuccess(false)
+                }
+            } catch (e: Exception) {
+                _errorMessage.value = "Erreur réseau : ${e.message}"
+                onSuccess(false)
+            }
+        }
+    }
+
+    fun updatePaiement(paiement: Paiement, onSuccess: () -> Unit) {
+        viewModelScope.launch {
+            try {
+                paiement.id?.let {
+                    val response = RetrofitInstance.api.updatePaiement(it, paiement)
+                    if (response.isSuccessful) {
+                        getPaiements()
+                        onSuccess()
+                    } else {
+                        _errorMessage.value = "Erreur modification : ${response.message()}"
+                    }
+                }
+            } catch (e: Exception) {
+                _errorMessage.value = "Erreur réseau : ${e.message}"
+            }
+        }
+    }
+
+    fun deletePaiement(id: Int, onSuccess: () -> Unit) {
+        viewModelScope.launch {
+            try {
+                val response = RetrofitInstance.api.deletePaiement(id)
+                if (response.isSuccessful) {
+                    getPaiements()
+                    onSuccess()
+                } else {
+                    _errorMessage.value = "Erreur suppression : ${response.message()}"
+                }
+            } catch (e: Exception) {
+                _errorMessage.value = "Erreur réseau : ${e.message}"
+            }
+        }
+    }
+
 }
+

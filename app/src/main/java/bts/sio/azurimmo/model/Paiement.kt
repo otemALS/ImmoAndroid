@@ -3,13 +3,11 @@ package bts.sio.azurimmo.model
 import android.content.ClipDescription
 import java.util.Date
 
-// Modèle pour un paiement
-data class PaiementApiResponse(
-    val embedded: EmbeddedContracts
+data class Paiement(
+    val id: Int? = null,
+    val montant: Float? = null,
+    val datePaiement: String? = null,
+    val contrat: Contrat? = null
 )
 
-data class Paiement(
-    val id: Int,
-    val montant: Double,
-    val datePaiement: Date
-)
+

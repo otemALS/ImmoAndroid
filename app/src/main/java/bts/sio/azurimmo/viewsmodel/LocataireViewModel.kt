@@ -1,37 +1,38 @@
+package bts.sio.azurimmo.viewsmodel
+
 import androidx.lifecycle.ViewModel
-import androidx.compose.runtime.State
-import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.viewModelScope
 import bts.sio.azurimmo.api.RetrofitInstance
 import bts.sio.azurimmo.model.Locataire
 import kotlinx.coroutines.launch
+import androidx.compose.runtime.*
 
 class LocataireViewModel : ViewModel() {
 
-    // Liste mutable des interventions
     private val _locataires = mutableStateOf<List<Locataire>>(emptyList())
     val locataires: State<List<Locataire>> = _locataires
 
-    // État de chargement
     private val _isLoading = mutableStateOf(false)
     val isLoading: State<Boolean> = _isLoading
 
-    // Message d'erreur
     private val _errorMessage = mutableStateOf<String?>(null)
     val errorMessage: State<String?> = _errorMessage
 
     init {
-        // Charger les interventions au démarrage
         getLocataires()
     }
 
-    private fun getLocataires() {
+    fun getLocataires() {
         viewModelScope.launch {
             _isLoading.value = true
             try {
-                // Appel de l'API
                 val response = RetrofitInstance.api.getLocataires()
-                _locataires.value = response
+                if (response.isSuccessful) {
+                    _locataires.value = response.body() ?: emptyList()
+                } else {
+                    _errorMessage.value = "Erreur serveur : ${response.code()}"
+                }
+
             } catch (e: Exception) {
                 _errorMessage.value = "Erreur : ${e.message}"
             } finally {
@@ -39,4 +40,59 @@ class LocataireViewModel : ViewModel() {
             }
         }
     }
+
+    fun addLocataire(locataire: Locataire, onSuccess: (Boolean) -> Unit) {
+        viewModelScope.launch {
+            try {
+                val response = RetrofitInstance.api.addLocataire(locataire)
+                if (response.isSuccessful) {
+                    getLocataires()
+                    onSuccess(true)
+                } else {
+                    println(">>> Échec ajout : ${response.code()} - ${response.errorBody()?.string()}")
+                    onSuccess(false)
+                }
+            } catch (e: Exception) {
+                _errorMessage.value = "Erreur ajout : ${e.message}"
+                onSuccess(false)
+            }
+        }
+    }
+
+    fun updateLocataire(id: Int, locataire: Locataire, onSuccess: (Boolean) -> Unit) {
+        viewModelScope.launch {
+            try {
+                val response = RetrofitInstance.api.updateLocataire(id, locataire)
+                if (response.isSuccessful) {
+                    getLocataires()
+                    onSuccess(true)
+                } else {
+                    _errorMessage.value = "Erreur mise à jour : ${response.message()}"
+                    onSuccess(false)
+                }
+            } catch (e: Exception) {
+                _errorMessage.value = "Erreur : ${e.message}"
+                onSuccess(false)
+            }
+        }
+    }
+
+    fun deleteLocataire(id: Int, onSuccess: (Boolean) -> Unit) {
+        viewModelScope.launch {
+            try {
+                val response = RetrofitInstance.api.deleteLocataire(id)
+                if (response.isSuccessful) {
+                    getLocataires()
+                    onSuccess(true)
+                } else {
+                    _errorMessage.value = "Erreur suppression : ${response.message()}"
+                    onSuccess(false)
+                }
+            } catch (e: Exception) {
+                _errorMessage.value = "Erreur : ${e.message}"
+                onSuccess(false)
+            }
+        }
+    }
+
 }

@@ -1,26 +1,28 @@
+package bts.sio.azurimmo.viewmodel
+
 import androidx.lifecycle.ViewModel
-import androidx.compose.runtime.mutableStateOf
-import bts.sio.azurimmo.model.Batiment
-import androidx.compose.runtime.*
 import androidx.lifecycle.viewModelScope
 import bts.sio.azurimmo.api.RetrofitInstance
 import bts.sio.azurimmo.model.Contrat
 import kotlinx.coroutines.launch
+import androidx.compose.runtime.*
+
 class ContratViewModel : ViewModel() {
-    // Liste mutable des bâtiments
+
     private val _contrats = mutableStateOf<List<Contrat>>(emptyList())
     val contrats: State<List<Contrat>> = _contrats
-    private val _isLoading = mutableStateOf(false)
 
+    private val _isLoading = mutableStateOf(false)
     val isLoading: State<Boolean> = _isLoading
+
     private val _errorMessage = mutableStateOf<String?>(null)
     val errorMessage: State<String?> = _errorMessage
+
     init {
-// Simuler un chargement de données initiales
         getContrats()
     }
 
-    private fun getContrats() {
+    fun getContrats() {
         viewModelScope.launch {
             _isLoading.value = true
             try {
@@ -30,21 +32,20 @@ class ContratViewModel : ViewModel() {
                 _errorMessage.value = "Erreur : ${e.message}"
             } finally {
                 _isLoading.value = false
-                println("pas de chargement")
             }
         }
     }
 
-    fun deleteContrat(id: Int, onSuccess: () -> Unit) {
+    fun addContrat(contrat: Contrat, onSuccess: () -> Unit = {}) {
         viewModelScope.launch {
             _isLoading.value = true
             try {
-                val response = RetrofitInstance.api.deleteContrat(id)
+                val response = RetrofitInstance.api.addContrat(contrat)
                 if (response.isSuccessful) {
                     getContrats()
                     onSuccess()
                 } else {
-                    _errorMessage.value = "Erreur suppression : ${response.message()}"
+                    _errorMessage.value = "Erreur ajout : ${response.message()}"
                 }
             } catch (e: Exception) {
                 _errorMessage.value = "Erreur : ${e.message}"
@@ -54,7 +55,7 @@ class ContratViewModel : ViewModel() {
         }
     }
 
-    fun updateContrat(contrat: Contrat, onSuccess: () -> Unit) {
+    fun updateContrat(contrat: Contrat, onSuccess: () -> Unit = {}) {
         viewModelScope.launch {
             _isLoading.value = true
             try {
@@ -73,5 +74,22 @@ class ContratViewModel : ViewModel() {
         }
     }
 
-
+    fun deleteContrat(id: Int, onSuccess: () -> Unit = {}) {
+        viewModelScope.launch {
+            _isLoading.value = true
+            try {
+                val response = RetrofitInstance.api.deleteContrat(id)
+                if (response.isSuccessful) {
+                    getContrats()
+                    onSuccess()
+                } else {
+                    _errorMessage.value = "Erreur suppression : ${response.message()}"
+                }
+            } catch (e: Exception) {
+                _errorMessage.value = "Erreur : ${e.message}"
+            } finally {
+                _isLoading.value = false
+            }
+        }
+    }
 }

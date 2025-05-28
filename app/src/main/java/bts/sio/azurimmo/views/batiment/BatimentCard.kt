@@ -21,8 +21,11 @@ fun BatimentCard(batiment: Batiment, onClick: (Int) -> Unit) {  // Notez l'annot
         modifier = Modifier
             .fillMaxWidth()
             .padding(8.dp)
-            .clickable { onClick(batiment.id)},
-        elevation = CardDefaults.elevatedCardElevation(defaultElevation = 4.dp),
+            .clickable {
+                batiment.id?.let { onClick(it) }
+            },
+
+                elevation = CardDefaults.elevatedCardElevation(defaultElevation = 4.dp),
         shape = RoundedCornerShape(8.dp)
     ) {
         Column(

@@ -60,6 +60,9 @@ dependencies {
     implementation(libs.androidx.recyclerview)
     implementation(libs.firebase.appdistribution.gradle)
     implementation(libs.androidx.navigation.runtime.android)
+    implementation(libs.androidx.foundation.layout.android)
+    implementation(libs.androidx.foundation.layout.android)
+    implementation(libs.androidx.foundation.android)
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.espresso.core)
@@ -74,6 +77,7 @@ dependencies {
     implementation(libs.ui) // Remplacez par la dernière version
     implementation(libs.androidx.foundation)
     implementation(libs.navigation.compose)
+    implementation("androidx.compose.material:material-icons-extended")
 
 
 }

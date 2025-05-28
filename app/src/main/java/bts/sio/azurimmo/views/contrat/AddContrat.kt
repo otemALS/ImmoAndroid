@@ -29,6 +29,7 @@ fun AddContrat(onContractAdded: () -> Unit) {
 
     val locataires = locataireViewModel.locataires.value
     val appartements = appartementViewModel.appartements.value
+    val error = contratViewModel.errorMessage.value
 
     var selectedLocataire by remember { mutableStateOf<Locataire?>(null) }
     var selectedAppartement by remember { mutableStateOf<Appartement?>(null) }
@@ -134,24 +135,33 @@ fun AddContrat(onContractAdded: () -> Unit) {
 
         Button(
             onClick = {
-                val contrat = Contrat(
-                    id = 0,
-                    dateEntree = dateEntree,
-                    dateSortie = dateSortie,
-                    montantLoyer = montantLoyer.toFloatOrNull() ?: 0f,
-                    montantCharges = montantCharges.toFloatOrNull() ?: 0f,
-                    statut = statut,
-                    locataire = selectedLocataire!!,
-                    appartement = selectedAppartement!!
-                )
-                contratViewModel.addContrat(contrat)
-                onContractAdded()
+                if (selectedLocataire != null && selectedAppartement != null) {
+                    val contrat = Contrat(
+                        id = 0,
+                        dateEntree = dateEntree,
+                        dateSortie = dateSortie,
+                        montantLoyer = montantLoyer.toFloatOrNull() ?: 0f,
+                        montantCharges = montantCharges.toFloatOrNull() ?: 0f,
+                        statut = statut,
+                        locataire = selectedLocataire!!,
+                        appartement = selectedAppartement!!
+                    )
+
+                    contratViewModel.addContrat(contrat) {
+                        onContractAdded()
+                    }
+                }
             },
             modifier = Modifier.align(Alignment.End)
         ) {
             Icon(Icons.Filled.Save, contentDescription = "Enregistrer")
             Spacer(modifier = Modifier.width(8.dp))
             Text("Enregistrer")
+        }
+
+        if (error != null) {
+            Spacer(modifier = Modifier.height(16.dp))
+            Text("Erreur : $error", color = MaterialTheme.colorScheme.error)
         }
     }
 }

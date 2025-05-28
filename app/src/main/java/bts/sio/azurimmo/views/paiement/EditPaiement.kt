@@ -5,9 +5,9 @@ import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.unit.dp
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.input.ImeAction
+import androidx.compose.ui.unit.dp
 import bts.sio.azurimmo.model.Paiement
 import bts.sio.azurimmo.viewmodel.PaiementViewModel
 
@@ -59,7 +59,13 @@ fun EditPaiement(
                     return@Button
                 }
 
+                if (paiement.id == null) {
+                    errorMessage = "Paiement invalide : ID manquant"
+                    return@Button
+                }
+
                 val updated = paiement.copy(
+                    id = paiement.id, // S'assurer que l'ID est bien passé
                     montant = montantFloat,
                     datePaiement = datePaiement
                 )

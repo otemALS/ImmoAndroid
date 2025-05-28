@@ -3,6 +3,7 @@ package bts.sio.azurimmo.views
 import AppartementViewModel
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Modifier
 import androidx.navigation.NavHostController
 import androidx.navigation.NavType
@@ -200,24 +201,30 @@ fun AppNavigation(navController: NavHostController, modifier: Modifier = Modifie
         composable("add_paiement") {
             AddPaiement(onPaiementAdded = { navController.popBackStack() })
         }
-
         composable(
             "edit_paiement/{id}",
             arguments = listOf(navArgument("id") { type = NavType.IntType })
         ) { backStackEntry ->
             val id = backStackEntry.arguments?.getInt("id") ?: return@composable
-            val paiement = viewModel<PaiementViewModel>().paiements.value.find { it.id == id }
+            val paiementViewModel: PaiementViewModel = viewModel()
+
+            // Charger les paiements
+            LaunchedEffect(Unit) {
+                paiementViewModel.getPaiements()
+            }
+
+            val paiement = paiementViewModel.paiements.value.find { it.id == id }
             if (paiement != null) {
                 EditPaiement(
                     paiement = paiement,
-                    viewModel = viewModel(),
+                    viewModel = paiementViewModel,
                     onUpdated = { navController.popBackStack() }
                 )
             } else {
                 Text("Paiement introuvable")
             }
-
         }
+
 
 
 

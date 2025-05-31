@@ -7,21 +7,29 @@ import androidx.compose.foundation.lazy.items
 import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
+import bts.sio.azurimmo.model.Batiment
 
 // Fonction Composable pour afficher la liste des bâtiments avec un bouton d'ajout
 @Composable
 fun BatimentList(
     viewModel: BatimentViewModel = viewModel(),
     onBatimentClick: (Int) -> Unit,
-    onAddBatimentClick: () -> Unit // Nouveau paramètre pour ajouter un bâtiment
+    onAddBatimentClick: () -> Unit
 ) {
     val batiments = viewModel.batiments.value
     val isLoading = viewModel.isLoading.value
     val errorMessage = viewModel.errorMessage.value
+
+    var showDialog by remember { mutableStateOf(false) }
+    var selectedBatiment by remember { mutableStateOf<Batiment?>(null) }
 
     LaunchedEffect(Unit) {
         viewModel.getBatiments()
@@ -48,7 +56,6 @@ fun BatimentList(
                     modifier = Modifier.fillMaxSize(),
                     horizontalAlignment = Alignment.CenterHorizontally
                 ) {
-                    // Bouton pour ajouter un bâtiment
                     Button(
                         onClick = onAddBatimentClick,
                         modifier = Modifier
@@ -58,13 +65,15 @@ fun BatimentList(
                         Text("Ajouter un bâtiment")
                     }
 
-                    // Liste des bâtiments
                     LazyColumn {
                         items(batiments) { batiment ->
                             BatimentCard(
                                 batiment = batiment,
-                                onClick = { batiment.id?.let { onBatimentClick(it) } }
-
+                                onClick = { batiment.id?.let { onBatimentClick(it) } },
+                                onMoreClick = {
+                                    selectedBatiment = it
+                                    showDialog = true
+                                }
                             )
                         }
                     }
@@ -72,4 +81,46 @@ fun BatimentList(
             }
         }
     }
+
+    if (showDialog && selectedBatiment != null) {
+        AlertDialog(
+            onDismissRequest = { showDialog = false },
+            title = { Text("Bâtiment ${selectedBatiment!!.id ?: ""}") },
+            text = {
+                Text(
+                    "Adresse : ${selectedBatiment!!.adresse ?: "-"}\n" +
+                            "Ville : ${selectedBatiment!!.ville ?: "-"}"
+                )
+            },
+            confirmButton = {
+                TextButton(onClick = {
+                    selectedBatiment?.id?.let {
+                        onBatimentClick(it)
+                        showDialog = false
+                    }
+                }) {
+                    Text("Modifier")
+                }
+            },
+            dismissButton = {
+                Row {
+                    TextButton(onClick = {
+                        selectedBatiment?.id?.let {
+                            viewModel.deleteBatiment(it) {
+                                viewModel.getBatiments()
+                                showDialog = false
+                            }
+                        }
+                    }) {
+                        Text("Supprimer")
+                    }
+                    Spacer(modifier = Modifier.width(8.dp))
+                    TextButton(onClick = { showDialog = false }) {
+                        Text("Fermer")
+                    }
+                }
+            }
+        )
+    }
 }
+

@@ -76,6 +76,46 @@ class BatimentViewModel : ViewModel() {
         }
     }
 
+    fun deleteBatiment(id: Int, onSuccess: () -> Unit = {}) {
+        viewModelScope.launch {
+            _isLoading.value = true
+            try {
+                val response = RetrofitInstance.api.deleteBatiment(id)
+                if (response.isSuccessful) {
+                    getBatiments()
+                    onSuccess()
+                } else {
+                    _errorMessage.value = "Erreur suppression : ${response.message()}"
+                }
+            } catch (e: Exception) {
+                _errorMessage.value = "Erreur : ${e.message}"
+            } finally {
+                _isLoading.value = false
+            }
+        }
+    }
+
+    fun updateBatiment(batiment: Batiment, onSuccess: () -> Unit = {}) {
+        viewModelScope.launch {
+            _isLoading.value = true
+            try {
+                val response = RetrofitInstance.api.updateBatiment(batiment.id!!, batiment)
+                if (response.isSuccessful) {
+                    getBatiments()
+                    onSuccess()
+                } else {
+                    _errorMessage.value = "Erreur lors de la modification : ${response.message()}"
+                }
+            } catch (e: Exception) {
+                _errorMessage.value = "Erreur : ${e.message}"
+            } finally {
+                _isLoading.value = false
+            }
+        }
+    }
+
+
+
 }
 
 

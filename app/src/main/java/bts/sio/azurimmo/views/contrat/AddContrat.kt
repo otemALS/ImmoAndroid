@@ -121,12 +121,13 @@ fun AddContrat(onContractAdded: () -> Unit) {
             ) {
                 appartements.forEach { app ->
                     DropdownMenuItem(
-                        text = { Text("N°${app.numero} - ${app.surface}m²") },
+                        text = { Text("N°${app.numero} - ${app.batiment.adresse}") },
                         onClick = {
                             selectedAppartement = app
                             appartementDropdownExpanded = false
                         }
                     )
+
                 }
             }
         }

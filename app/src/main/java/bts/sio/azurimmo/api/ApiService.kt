@@ -85,6 +85,14 @@ interface ApiService {
     @DELETE("api/paiements/{id}")
     suspend fun deletePaiement(@Path("id") id: Int): retrofit2.Response<Void>
 
+    @DELETE("api/batiments/{id}")
+    suspend fun deleteBatiment(@Path("id") id: Int): Response<Void>
+
+    @PUT("api/batiments/{id}")
+    suspend fun updateBatiment(@Path("id") id: Int, @Body batiment: Batiment): Response<Void>
+
+
+
 
 }
 

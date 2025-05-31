@@ -1,6 +1,7 @@
 package bts.sio.azurimmo.views
 
 import AppartementViewModel
+import BatimentViewModel
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
@@ -17,6 +18,7 @@ import bts.sio.azurimmo.viewsmodel.LocataireViewModel
 import bts.sio.azurimmo.views.appartement.*
 import bts.sio.azurimmo.views.batiment.BatimentAdd
 import bts.sio.azurimmo.views.batiment.BatimentList
+import bts.sio.azurimmo.views.batiment.EditBatiment
 import bts.sio.azurimmo.views.contrat.EditContrat
 import bts.sio.azurimmo.views.contrat.AddContrat
 import bts.sio.azurimmo.views.contrat.ContratList
@@ -104,9 +106,12 @@ fun AppNavigation(navController: NavHostController, modifier: Modifier = Modifie
             arguments = listOf(navArgument("id") { type = NavType.IntType })
         ) { backStackEntry ->
             val id = backStackEntry.arguments?.getInt("id") ?: return@composable
-            val appartement = viewModel<AppartementViewModel>().appartements.value.find { it.id == id }
+            val appartement =
+                viewModel<AppartementViewModel>().appartements.value.find { it.id == id }
             if (appartement != null) {
-                EditAppartement(appartement = appartement, onUpdated = { navController.popBackStack() })
+                EditAppartement(
+                    appartement = appartement,
+                    onUpdated = { navController.popBackStack() })
             } else {
                 Text("Appartement introuvable")
             }
@@ -161,7 +166,8 @@ fun AppNavigation(navController: NavHostController, modifier: Modifier = Modifie
             })
         }
 
-        composable("edit_locataire/{id}",
+        composable(
+            "edit_locataire/{id}",
             arguments = listOf(navArgument("id") { type = NavType.IntType })
         ) { backStackEntry ->
             val id = backStackEntry.arguments?.getInt("id") ?: return@composable
@@ -178,7 +184,8 @@ fun AppNavigation(navController: NavHostController, modifier: Modifier = Modifie
 
         }
 
-        composable("edit_contrat/{id}",
+        composable(
+            "edit_contrat/{id}",
             arguments = listOf(navArgument("id") { type = NavType.IntType })
         ) { backStackEntry ->
             val id = backStackEntry.arguments?.getInt("id")
@@ -225,12 +232,35 @@ fun AppNavigation(navController: NavHostController, modifier: Modifier = Modifie
             }
         }
 
+        composable(
+            "edit_batiment/{id}",
+            arguments = listOf(navArgument("id") { type = NavType.IntType })
+        ) { backStackEntry ->
+            val id = backStackEntry.arguments?.getInt("id") ?: return@composable
+            val viewModel: BatimentViewModel = viewModel()
+            val batiment = viewModel.batiments.value.find { it.id == id }
 
+            LaunchedEffect(Unit) {
+                viewModel.getBatiments()
+            }
 
-
-
-
+            if (batiment != null) {
+                EditBatiment(batiment = batiment, viewModel = viewModel) {
+                    navController.popBackStack()
+                }
+            } else {
+                Text("Bâtiment introuvable")
+            }
+        }
     }
-
-
 }
+
+
+
+
+
+
+
+
+
+

@@ -15,6 +15,8 @@ import androidx.navigation.NavHostController
 import bts.sio.azurimmo.model.Contrat
 import bts.sio.azurimmo.viewmodel.ContratViewModel
 
+
+
 @Composable
 fun ContratList(
     navController: NavHostController,
@@ -57,20 +59,40 @@ fun ContratList(
         }
     }
 
-    // Exemple de dialogue (à adapter selon ton besoin)
     if (showDialog && selectedContrat != null) {
         AlertDialog(
             onDismissRequest = { showDialog = false },
-            confirmButton = {
-                TextButton(onClick = { showDialog = false }) {
-                    Text("Fermer")
-                }
-            },
             title = { Text("Contrat ${selectedContrat!!.id}") },
             text = {
                 Text("Statut : ${selectedContrat!!.statut}\n" +
                         "Loyer : ${selectedContrat!!.montantLoyer} €\n" +
                         "Charges : ${selectedContrat!!.montantCharges} €")
+            },
+            confirmButton = {
+                TextButton(onClick = {
+                    navController.navigate("edit_contrat/${selectedContrat!!.id}")
+                    showDialog = false
+                }) {
+                    Text("Modifier")
+                }
+            },
+            dismissButton = {
+                Row {
+                    TextButton(onClick = {
+                        selectedContrat?.id?.let {
+                            viewModel.deleteContrat(it) {
+                                viewModel.getContrats()
+                                showDialog = false
+                            }
+                        }
+                    }) {
+                        Text("Supprimer")
+                    }
+                    Spacer(modifier = Modifier.width(8.dp))
+                    TextButton(onClick = { showDialog = false }) {
+                        Text("Fermer")
+                    }
+                }
             }
         )
     }

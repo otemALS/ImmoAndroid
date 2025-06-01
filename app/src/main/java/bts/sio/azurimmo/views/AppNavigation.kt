@@ -52,8 +52,10 @@ fun AppNavigation(navController: NavHostController, modifier: Modifier = Modifie
                 },
                 onAddBatimentClick = {
                     navController.navigate("add_batiment")
-                }
+                },
+                navController = navController
             )
+
         }
 
         composable("add_batiment") {

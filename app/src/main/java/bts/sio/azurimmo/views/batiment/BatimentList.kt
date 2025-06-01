@@ -15,6 +15,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
+import androidx.navigation.NavController
 import bts.sio.azurimmo.model.Batiment
 
 // Fonction Composable pour afficher la liste des bâtiments avec un bouton d'ajout
@@ -22,7 +23,8 @@ import bts.sio.azurimmo.model.Batiment
 fun BatimentList(
     viewModel: BatimentViewModel = viewModel(),
     onBatimentClick: (Int) -> Unit,
-    onAddBatimentClick: () -> Unit
+    onAddBatimentClick: () -> Unit,
+    navController: NavController
 ) {
     val batiments = viewModel.batiments.value
     val isLoading = viewModel.isLoading.value
@@ -94,10 +96,8 @@ fun BatimentList(
             },
             confirmButton = {
                 TextButton(onClick = {
-                    selectedBatiment?.id?.let {
-                        onBatimentClick(it)
-                        showDialog = false
-                    }
+                    navController.navigate("edit_batiment/${selectedBatiment!!.id}")
+                    showDialog = false
                 }) {
                     Text("Modifier")
                 }
@@ -123,4 +123,5 @@ fun BatimentList(
         )
     }
 }
+
 
